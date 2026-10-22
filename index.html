@@ -8,14 +8,14 @@
 <meta name="keywords" content="SV1DOD, HB9ISH, amateur radio satellite tracker, ham radio satellite tracking, satellite pass prediction, ISS tracker, SO-50, RS-44, AO-7, AO-73, QO-100, FM satellite, linear transponder, Doppler shift, AOS LOS, footprint, ground track, Maidenhead locator, QTH, SGP4, TLE, CelesTrak, AMSAT, OSCAR, cubesat, real-time satellite map">
 <meta name="author" content="George Anestopoulos, SV1DOD / HB9ISH">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://orbitqth.aganet.gr/">
+<link rel="canonical" href="https://hamsat.aganet.gr/">
 <meta name="theme-color" content="#020409">
 <meta name="application-name" content="OrbitQTH">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="OrbitQTH">
 <meta property="og:title" content="OrbitQTH - Real-Time Amateur Radio Satellite Tracker">
 <meta property="og:description" content="Live positions, footprints, pass predictions and Doppler for every amateur radio satellite, on a dark world map with day and night. Runs entirely in your browser.">
-<meta property="og:url" content="https://orbitqth.aganet.gr/">
+<meta property="og:url" content="https://hamsat.aganet.gr/">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OrbitQTH - Real-Time Amateur Radio Satellite Tracker">
@@ -27,7 +27,7 @@
   "@type": "WebApplication",
   "name": "OrbitQTH",
   "alternateName": "OrbitQTH Amateur Radio Satellite Tracker",
-  "url": "https://orbitqth.aganet.gr/",
+  "url": "https://hamsat.aganet.gr/",
   "description": "Real-time amateur radio satellite tracker with footprints, ground tracks, pass predictions, azimuth, elevation, Doppler shift and transponder frequencies.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
@@ -933,7 +933,7 @@ for (const [oldKey, newKey] of [['hamsat.qth', LS.qth], ['hamsat.view.v2', LS.vi
   } catch (e) { /* storage unavailable */ }
 }
 
-const EMBEDDED_TLE_DATE = '2026-10-22T08:55:42Z';
+const EMBEDDED_TLE_DATE = '2026-10-22T09:03:20Z';
 // The site's own tle.txt (refreshed by the pipeline) first, CelesTrak as a fallback.
 const TLE_SOURCES = [
   { url: 'tle.txt', label: 'site TLE file' },
