@@ -258,6 +258,16 @@ body.focus .under, body.focus #legend { display: none; }
 }
 #viewctl .grp { display: flex; gap: 3px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 9px; padding: 3px; }
 #viewctl .timectl { margin-right: auto; }
+.tools-wrap { position: relative; }
+#tools-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 40;
+  display: flex; flex-direction: column; gap: 4px; padding: 8px; min-width: 190px;
+  background: var(--panel-solid); border: 1px solid var(--line-strong); border-radius: 10px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.6);
+}
+#tools-menu[hidden] { display: none; }
+#tools-menu button { text-align: left; }
+body.nobar #viewctl, body.focus #viewctl { display: none; }
 #viewctl button { padding: 3px 8px; font-size: 11px; border-radius: 6px; border-color: transparent; }
 #viewctl select { padding: 2px 6px; font-size: 11px; border-radius: 6px; }
 #viewctl button.active { border-color: rgba(95,212,255,0.6); }
@@ -459,6 +469,7 @@ body.focus .under, body.focus #legend { display: none; }
   <span class="panelctl" title="Show or hide the side columns">
     <button id="tog-left" class="act on" title="Show or hide the satellite list (1)">List</button>
     <button id="tog-right" class="act on" title="Show or hide the selected satellite panel (2)">Details</button>
+    <button id="tog-bar" class="act on" title="Show or hide the map control bar (3)">Bar</button>
     <button class="act" id="focus-btn" title="Hide both side columns (F)"><span class="ico" id="focus-ico">&#9974;</span><span id="focus-label">Map only</span></button>
   </span>
   <button class="pill" id="swx-pill" title="Space weather: solar flux, geomagnetic Kp and X-ray flare class. Drives HF propagation worldwide."><span class="dot"></span><span id="swx-label">space wx</span></button>
@@ -557,14 +568,15 @@ body.focus .under, body.focus #legend { display: none; }
           <option value="30">above 30&deg;</option>
         </select>
       </div>
-      <div class="grp">
-        <button id="pin-qth" class="pin" title="Click a point on the map to set your station location">pin QTH on map</button>
-      </div>
-      <div class="grp">
-        <button id="offline-btn" title="Save a self-contained orbitqth.html with the latest orbital elements baked in. Open it from your phone or a USB stick with no internet: tracking and pass predictions keep working offline.">&#8681; offline copy</button>
+      <div class="grp tools-wrap">
+        <button id="tools-btn" title="Station and data tools: pin your QTH on the map, save an offline copy, update orbital elements">&#9881; tools</button>
+        <div id="tools-menu" hidden>
+          <button id="pin-qth" class="pin" title="Click a point on the map to set your station location">pin QTH on map</button>
+          <button id="offline-btn" title="Save a self-contained orbitqth.html with the latest orbital elements baked in. Open it from your phone or a USB stick with no internet: tracking and pass predictions keep working offline.">&#8681; offline copy</button>
         <button id="tle-fetch-btn" title="Pull fresh orbital elements over the internet and apply them: first this site's own tle.txt, then CelesTrak directly. A saved copy of the page has no tle.txt, so it goes straight to CelesTrak.">&#8635; fetch TLEs</button>
         <button id="tle-import-btn" title="Load a TLE file you downloaded yourself from CelesTrak (amateur group) or AMSAT (nasabare.txt). The elements are applied and remembered, so a saved offline copy can be refreshed without this page ever reaching the internet.">&#8682; load TLE</button>
         <input type="file" id="tle-import" accept=".txt,.tle,text/plain" hidden>
+        </div>
       </div>
     </div>
     <canvas id="map"></canvas>
@@ -586,7 +598,7 @@ body.focus .under, body.focus #legend { display: none; }
     <div class="detail" id="detail">
       <div class="empty">
         Select a satellite from the list or click one on the map.<br><br>
-        Set your station location with the <b>QTH</b> button, or click <b>pin QTH on map</b> and then your position on the map, to get azimuth, elevation, range, Doppler and pass predictions.<br><br>
+        Set your station location with the <b>QTH</b> button, or use <b>pin QTH on map</b> in the map bar's tools menu, then click your position on the map, to get azimuth, elevation, range, Doppler and pass predictions.<br><br>
         Keys: <kbd>/</kbd> search, <kbd>Esc</kbd> deselect, <kbd>N</kbd> back to real time.<br><br>
         <span style="color:var(--dim)">OrbitQTH by George Anestopoulos, SV1DOD / HB9ISH. 73!</span>
       </div>
@@ -933,7 +945,7 @@ for (const [oldKey, newKey] of [['hamsat.qth', LS.qth], ['hamsat.view.v2', LS.vi
   } catch (e) { /* storage unavailable */ }
 }
 
-const EMBEDDED_TLE_DATE = '2026-10-22T09:03:20Z';
+const EMBEDDED_TLE_DATE = '2026-10-22T09:35:52Z';
 // The site's own tle.txt (refreshed by the pipeline) first, CelesTrak as a fallback.
 const TLE_SOURCES = [
   { url: 'tle.txt', label: 'site TLE file' },
@@ -996,6 +1008,10 @@ const MAP_COLORS = {
   qthLink:     'rgba(255,207,92,0.7)',
   wave:        { rgb: '255,225,150', peakAlpha: 0.22, maxAlpha: 0.3, periodMs: 9000, fronts: [0, 0.33, 0.66] },
 };
+
+// Font stacks resolved once: a getComputedStyle per frame forces style recalc.
+const FONT_SANS = getComputedStyle(document.body).getPropertyValue('--sans');
+const FONT_MONO = getComputedStyle(document.body).getPropertyValue('--mono');
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -1134,6 +1150,7 @@ function greatCircle(lat1, lon1, lat2, lon2, n) {
 // ---------------------------------------------------------------- state
 const tooltip = $('#tooltip');
 const qth = $('#qth');
+const toolsMenu = $('#tools-menu');
 function setPinMode(on) {
   state.pinMode = on;
   state.pinHover = null;
@@ -1159,7 +1176,7 @@ const state = {
   realtime: true,
   speed: 1,
   filters: { text: '', visible: false, comms: true, alpha: false },
-  view: { fp: 'visible', labels: 'visible', night: true, grid: true, track: true, bodies: false, quakes: false, myfp: true, myfpEl: 5 },
+  view: { bar: true, fp: 'visible', labels: 'visible', night: true, grid: true, track: true, bodies: false, quakes: false, myfp: true, myfpEl: 5 },
   tle: { source: '', time: 0, ok: false },
   hover: null,
   pinMode: false,
@@ -1465,7 +1482,7 @@ async function loadQuakes() {
   }
 }
 function drawQuakes(ctx, now) {
-  const font = getComputedStyle(document.body).getPropertyValue('--mono');
+  const font = FONT_MONO;
   ctx.font = `10px ${font}`;
   for (const q of quakes.list) {
     const x = px(q.lon), y = py(q.lat);
@@ -1629,6 +1646,8 @@ function applyLayout() {
   document.body.classList.toggle('no-right', !showRight);
   $('#tog-left').classList.toggle('on', showLeft);
   $('#tog-right').classList.toggle('on', showRight);
+  document.body.classList.toggle('nobar', state.view.bar === false);
+  $('#tog-bar').classList.toggle('on', state.view.bar !== false);
   if (wantStacked !== stacked) {
     stacked = wantStacked;
     document.body.classList.toggle('stacked', stacked);
@@ -1641,6 +1660,12 @@ function applyLayout() {
   $('#focus-label').textContent = focusMode ? 'Show panels' : 'Map only';
   $('#focus-ico').innerHTML = focusMode ? '&#9707;' : '&#9974;';
   $('#focus-btn').classList.toggle('active', focusMode);
+}
+function setBar(on) {
+  state.view.bar = on;
+  localStorage.setItem(LS.view, JSON.stringify(state.view));
+  applyLayout();
+  resizeMap();
 }
 function setPanels(left, right) {
   showLeft = left;
@@ -1827,7 +1852,7 @@ function drawMyFootprint(ctx, sat) {
   const bottom = mine.reduce((a, b) => (b[0] < a[0] ? b : a));
   const lx = Math.round(px(bottom[1])) + 6, ly = Math.round(py(bottom[0])) - 6;
   const text = `your reach via ${sat.name}${minEl ? ` (above ${minEl}\u00b0)` : ' (horizon)'}`;
-  ctx.font = `600 11px ${getComputedStyle(document.body).getPropertyValue('--sans')}`;
+  ctx.font = `600 11px ${FONT_SANS}`;
   ctx.fillStyle = 'rgba(0,0,0,0.65)';
   ctx.fillText(text, lx + 1, ly + 1);
   ctx.fillStyle = 'rgba(255,190,220,1)';
@@ -1913,7 +1938,7 @@ function drawMoon(ctx, moon, illum) {
     ctx.beginPath(); ctx.ellipse(0, 0, r * Math.abs(2 * f - 1), r, 0, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
     ctx.fillStyle = 'rgba(200,215,240,0.8)';
-    ctx.font = '10px ' + getComputedStyle(document.body).getPropertyValue('--sans');
+    ctx.font = '10px ' + FONT_SANS;
     ctx.fillText(`Moon ${Math.round(f * 100)}%`, x + 9, y + 4);
   }
 }
@@ -1935,7 +1960,7 @@ function drawObserver(ctx, now) {
   ctx.moveTo(x, y - 9); ctx.lineTo(x, y - 5); ctx.moveTo(x, y + 5); ctx.lineTo(x, y + 9);
   ctx.stroke();
   ctx.fillStyle = 'rgba(255,190,220,0.95)';
-  ctx.font = '600 10.5px ' + getComputedStyle(document.body).getPropertyValue('--mono');
+  ctx.font = '600 10.5px ' + FONT_MONO;
   ctx.fillText(o.grid, x + 8, y - 7);
 }
 
@@ -1979,7 +2004,7 @@ function drawMap(now) {
     ctx.strokeStyle = 'rgba(160,195,240,0.18)';
     ctx.beginPath(); ctx.moveTo(0, snap(py(0))); ctx.lineTo(W, snap(py(0))); ctx.stroke();
     ctx.fillStyle = 'rgba(160,195,240,0.4)';
-    ctx.font = '10px ' + getComputedStyle(document.body).getPropertyValue('--mono');
+    ctx.font = '10px ' + FONT_MONO;
     for (let lon = -150; lon < 180; lon += 30) ctx.fillText(`${Math.abs(lon)}${lon < 0 ? 'W' : lon > 0 ? 'E' : ''}`, Math.round(px(lon)) + 4, 12);
     for (let lat = -60; lat <= 60; lat += 30) if (lat) ctx.fillText(`${Math.abs(lat)}${lat < 0 ? 'S' : 'N'}`, 4, Math.round(py(lat)) - 3);
   }
@@ -2058,7 +2083,7 @@ function drawMap(now) {
     ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2); ctx.fill();
   }
 
-  const font = getComputedStyle(document.body).getPropertyValue('--sans');
+  const font = FONT_SANS;
   ctx.font = `600 ${Math.round(11 * labelScale)}px ${font}`;
   ctx.textBaseline = 'middle';
   const labelMode = state.view.labels;
@@ -2105,7 +2130,7 @@ function drawMap(now) {
   // amber once the set is old enough to start mattering for LEO pointing.
   if (state.tle.time) {
     const age = Date.now() - state.tle.time;
-    ctx.font = `10px ${getComputedStyle(document.body).getPropertyValue('--mono')}`;
+    ctx.font = `10px ${FONT_MONO}`;
     ctx.textAlign = 'right';
     ctx.fillStyle = age > 48 * 3600e3 ? 'rgba(255,207,92,0.85)' : 'rgba(160,195,240,0.5)';
     ctx.fillText(`elements ${fmtAge(age)} old \u00b7 ${state.tle.source}`, W - 8, H - 8);
@@ -2125,7 +2150,7 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 function drawTimeline(now) {
   const ctx = timeline.canvas.getContext('2d'), W = map.W, H = TL_H, dpr = map.dpr;
-  const style = getComputedStyle(document.body), mono = style.getPropertyValue('--mono'), sans = style.getPropertyValue('--sans');
+  const mono = FONT_MONO, sans = FONT_SANS;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.fillStyle = 'rgba(3,6,12,0.95)';
   ctx.fillRect(0, 0, W, H);
@@ -2464,7 +2489,7 @@ function drawPolar(sat, pass) {
   ctx.clearRect(0, 0, size, size);
   const cx = size / 2, cy = size / 2, R = size / 2 - 18;
   const pt = (az, el) => { const r = R * (90 - el) / 90; return [cx + r * Math.sin(az * D2R), cy - r * Math.cos(az * D2R)]; };
-  const mono = getComputedStyle(document.body).getPropertyValue('--mono');
+  const mono = FONT_MONO;
   const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
   bg.addColorStop(0, 'rgba(10,17,32,0.95)'); bg.addColorStop(1, 'rgba(2,4,9,0.95)');
   ctx.fillStyle = bg; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
@@ -2646,6 +2671,9 @@ map.canvas.addEventListener('dblclick', (e) => {
   if (state.pinMode || satAt(e.clientX, e.clientY)) return;
   placeQth(e);
 });
+$('#tools-btn').addEventListener('click', (e) => { e.stopPropagation(); toolsMenu.hidden = !toolsMenu.hidden; });
+toolsMenu.addEventListener('click', (e) => { if (e.target.closest('button')) toolsMenu.hidden = true; });
+document.addEventListener('click', (e) => { if (!toolsMenu.hidden && !e.target.closest('.tools-wrap')) toolsMenu.hidden = true; });
 $('#pin-qth').addEventListener('click', () => setPinMode(!state.pinMode));
 $('#offline-btn').addEventListener('click', downloadOfflineCopy);
 $('#tle-fetch-btn').addEventListener('click', async () => {
@@ -2686,11 +2714,12 @@ $('#q-pin').addEventListener('click', () => { qth.classList.remove('open'); setP
 document.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') { if (e.key === 'Escape') e.target.blur(); return; }
   if (e.key === '/') { e.preventDefault(); $('#search').focus(); }
-  else if (e.key === 'Escape') { if (state.pinMode) setPinMode(false); else if (state.selected) selectSat(state.selected); }
+  else if (e.key === 'Escape') { if (!toolsMenu.hidden) toolsMenu.hidden = true; else if (state.pinMode) setPinMode(false); else if (state.selected) selectSat(state.selected); }
   else if (e.key === 'n' || e.key === 'N') goRealtime();
   else if (e.key === 'f' || e.key === 'F') { const h = !showLeft && !showRight; setPanels(h, h); }
   else if (e.key === '1') setPanels(!showLeft, showRight);
   else if (e.key === '2') setPanels(showLeft, !showRight);
+  else if (e.key === '3') setBar(state.view.bar === false);
 });
 
 // QTH dialog
@@ -2780,14 +2809,23 @@ function tick(nowPerf) {
   applyLayout();
   resizeMap();
   $('#tog-left').addEventListener('click', () => setPanels(!showLeft, showRight));
+  $('#tog-bar').addEventListener('click', () => setBar(state.view.bar === false));
   $('#tog-right').addEventListener('click', () => setPanels(showLeft, !showRight));
   $('#focus-btn').addEventListener('click', () => {
     const hidden = !showLeft && !showRight;
     setPanels(hidden, hidden);
   });
-  window.addEventListener('resize', () => { applyLayout(); resizeMap(); detailDirty = true; });
-  window.addEventListener('orientationchange', () => { setTimeout(() => { resizeMap(); detailDirty = true; }, 150); });
-  new ResizeObserver(() => resizeMap()).observe($('#mapwrap'));
+  // Resizing is damped: the expensive rebuild (coastline render with glow and
+  // the per-pixel night shading) runs once after the drag settles, not on
+  // every one of the dozens of events a drag fires.
+  let resizeTimer = 0;
+  const scheduleResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { applyLayout(); resizeMap(); listDirty = true; detailDirty = true; }, 150);
+  };
+  window.addEventListener('resize', scheduleResize);
+  window.addEventListener('orientationchange', scheduleResize);
+  new ResizeObserver(scheduleResize).observe($('#mapwrap'));
   loadTLEs(false);
   loadSpaceWeather();
   setInterval(loadSpaceWeather, 900e3);
