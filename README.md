@@ -15,9 +15,9 @@ account, no install: download index.html, open it, work the birds.
 - Azimuth, elevation, range and live Doppler with the exact RX frequency
 - Uplink, downlink, CTCSS tones and beacons for the workable satellites
 - Polar sky view of each pass and a six-hour timeline across all birds
-- Works offline: "fetch TLEs" pulls fresh elements over the internet,
-  "load TLE" reads a file you downloaded yourself, and "offline copy"
-  saves a field-ready page with current elements baked in
+- Works offline: the **tools** menu on the map bar fetches fresh elements,
+  loads a TLE file you downloaded yourself, or saves a field-ready copy
+  with current elements baked in
 
 ## Keeping elements fresh
 
@@ -25,13 +25,21 @@ Positions are computed from orbital element sets (TLEs) that age. The map
 shows their age in its bottom-right corner; a set a few days old still points
 an antenna fine, weeks old does not.
 
-- On the live site, elements refresh automatically.
-- On a downloaded copy, press **fetch TLEs** to pull current elements from
-  CelesTrak (needs internet once).
-- With no internet at all: download the amateur set yourself from
+On the live site, elements refresh automatically. On a downloaded copy,
+open the **tools** menu at the right end of the map control bar (the gear
+button) and pick what fits:
+
+- **fetch TLEs** downloads current elements over the internet and applies
+  them. On a saved copy this pulls straight from CelesTrak, so it needs a
+  connection once.
+- **load TLE** updates with no connection at all. Download the amateur set
+  yourself from
   [CelesTrak](https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=tle)
   or [AMSAT](https://www.amsat.org/tle/current/nasabare.txt) on any machine,
-  carry the file over, and press **load TLE**. The page remembers it.
+  carry the file over, press **load TLE** and pick it. The page applies and
+  remembers it.
+- **offline copy** saves a fresh single file with the current elements baked
+  in, ready for the field.
 
 ## Quick start
 
