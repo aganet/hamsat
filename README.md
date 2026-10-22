@@ -1,11 +1,11 @@
-# HamSat Tracker
+# OrbitQTH
 
 One HTML file that tracks every amateur radio satellite. No server, no
 account, no install: download index.html, open it, work the birds.
 
-![HamSat Tracker](screenshot.png)
+![OrbitQTH](screenshot.png)
 
-**Live:** https://hamsat.aganet.gr/
+**Live:** https://orbitqth.aganet.gr/
 
 ## What it does
 

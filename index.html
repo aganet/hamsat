@@ -3,31 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HamSat - Real-Time Amateur Radio Satellite Tracker</title>
+<title>OrbitQTH - Real-Time Amateur Radio Satellite Tracker</title>
 <meta name="description" content="Free real-time amateur radio satellite tracker: live positions of all ham radio satellites (ISS, SO-50, RS-44, AO-7, QO-100 and more), footprints, ground tracks, pass predictions, azimuth, elevation, Doppler shift and transponder frequencies for your QTH.">
 <meta name="keywords" content="SV1DOD, HB9ISH, amateur radio satellite tracker, ham radio satellite tracking, satellite pass prediction, ISS tracker, SO-50, RS-44, AO-7, AO-73, QO-100, FM satellite, linear transponder, Doppler shift, AOS LOS, footprint, ground track, Maidenhead locator, QTH, SGP4, TLE, CelesTrak, AMSAT, OSCAR, cubesat, real-time satellite map">
 <meta name="author" content="George Anestopoulos, SV1DOD / HB9ISH">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://hamsat.aganet.gr/">
+<link rel="canonical" href="https://orbitqth.aganet.gr/">
 <meta name="theme-color" content="#020409">
-<meta name="application-name" content="HamSat">
+<meta name="application-name" content="OrbitQTH">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="HamSat">
-<meta property="og:title" content="HamSat - Real-Time Amateur Radio Satellite Tracker">
+<meta property="og:site_name" content="OrbitQTH">
+<meta property="og:title" content="OrbitQTH - Real-Time Amateur Radio Satellite Tracker">
 <meta property="og:description" content="Live positions, footprints, pass predictions and Doppler for every amateur radio satellite, on a dark world map with day and night. Runs entirely in your browser.">
-<meta property="og:url" content="https://hamsat.aganet.gr/">
+<meta property="og:url" content="https://orbitqth.aganet.gr/">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HamSat - Real-Time Amateur Radio Satellite Tracker">
+<meta name="twitter:title" content="OrbitQTH - Real-Time Amateur Radio Satellite Tracker">
 <meta name="twitter:description" content="Live positions, footprints, pass predictions and Doppler for every amateur radio satellite, in your browser.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2304060c'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%235fd4ff' stroke-width='2' opacity='.6'/%3E%3Ccircle cx='32' cy='32' r='12' fill='none' stroke='%235fd4ff' stroke-width='2' opacity='.8'/%3E%3Ccircle cx='46' cy='18' r='5' fill='%23ffcf5c'/%3E%3C/svg%3E">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "HamSat",
-  "alternateName": "HamSat Amateur Radio Satellite Tracker",
-  "url": "https://hamsat.aganet.gr/",
+  "name": "OrbitQTH",
+  "alternateName": "OrbitQTH Amateur Radio Satellite Tracker",
+  "url": "https://orbitqth.aganet.gr/",
   "description": "Real-time amateur radio satellite tracker with footprints, ground tracks, pass predictions, azimuth, elevation, Doppler shift and transponder frequencies.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
@@ -447,7 +447,7 @@ body.focus .under, body.focus #legend { display: none; }
 </head>
 <body>
 <header>
-  <div class="brand"><b>HAM<i>SAT</i> TRACKER</b><span>amateur radio satellites, live</span><span class="call">SV1DOD / HB9ISH</span></div>
+  <div class="brand"><b>ORBIT<i>QTH</i></b><span>amateur radio satellites, live</span><span class="call">SV1DOD / HB9ISH</span></div>
   <span class="spacer"></span>
   <div class="clock">
     <span id="sim-badge" class="sim" hidden></span>
@@ -469,8 +469,8 @@ body.focus .under, body.focus #legend { display: none; }
 </header>
 
 <div id="seo">
-  <h1>HamSat: real-time amateur radio satellite tracker</h1>
-  <p>HamSat shows the live position of every amateur radio satellite on a world map with
+  <h1>OrbitQTH: real-time amateur radio satellite tracker</h1>
+  <p>OrbitQTH shows the live position of every amateur radio satellite on a world map with
   day and night shading. Set your station location as coordinates or a Maidenhead locator,
   or pin it directly on the map, and the page computes azimuth, elevation, range, range rate
   and Doppler shift for the satellite you select, together with pass predictions for the
@@ -491,7 +491,7 @@ body.focus .under, body.focus #legend { display: none; }
     <li>A six-hour timeline of upcoming passes across all tracked satellites.</li>
     <li>Twilight terminator, sun and moon sub-points, and satellite sunlight or eclipse state.</li>
   </ul>
-  <p>HamSat is written and maintained by George Anestopoulos, SV1DOD.</p>
+  <p>OrbitQTH is written and maintained by George Anestopoulos, SV1DOD.</p>
 </div>
 
 <main>
@@ -561,7 +561,7 @@ body.focus .under, body.focus #legend { display: none; }
         <button id="pin-qth" class="pin" title="Click a point on the map to set your station location">pin QTH on map</button>
       </div>
       <div class="grp">
-        <button id="offline-btn" title="Save a self-contained hamsat.html with the latest orbital elements baked in. Open it from your phone or a USB stick with no internet: tracking and pass predictions keep working offline.">&#8681; offline copy</button>
+        <button id="offline-btn" title="Save a self-contained orbitqth.html with the latest orbital elements baked in. Open it from your phone or a USB stick with no internet: tracking and pass predictions keep working offline.">&#8681; offline copy</button>
         <button id="tle-fetch-btn" title="Pull fresh orbital elements over the internet and apply them: first this site's own tle.txt, then CelesTrak directly. A saved copy of the page has no tle.txt, so it goes straight to CelesTrak.">&#8635; fetch TLEs</button>
         <button id="tle-import-btn" title="Load a TLE file you downloaded yourself from CelesTrak (amateur group) or AMSAT (nasabare.txt). The elements are applied and remembered, so a saved offline copy can be refreshed without this page ever reaching the internet.">&#8682; load TLE</button>
         <input type="file" id="tle-import" accept=".txt,.tle,text/plain" hidden>
@@ -588,7 +588,7 @@ body.focus .under, body.focus #legend { display: none; }
         Select a satellite from the list or click one on the map.<br><br>
         Set your station location with the <b>QTH</b> button, or click <b>pin QTH on map</b> and then your position on the map, to get azimuth, elevation, range, Doppler and pass predictions.<br><br>
         Keys: <kbd>/</kbd> search, <kbd>Esc</kbd> deselect, <kbd>N</kbd> back to real time.<br><br>
-        <span style="color:var(--dim)">HamSat by George Anestopoulos, SV1DOD / HB9ISH. 73!</span>
+        <span style="color:var(--dim)">OrbitQTH by George Anestopoulos, SV1DOD / HB9ISH. 73!</span>
       </div>
     </div>
   </aside>
@@ -922,14 +922,25 @@ LILIUM-4
 
 const D2R = Math.PI / 180, R2D = 180 / Math.PI;
 const R_EARTH = 6371.0088, R_EQ = 6378.137, MU = 398600.4418, C_KMS = 299792.458;
-const EMBEDDED_TLE_DATE = '2026-10-22T08:30:16Z';
+const LS = { qth: 'orbitqth.qth', view: 'orbitqth.view', panels: 'orbitqth.panels', tle: 'orbitqth.tle' };
+// One-time migration from the keys this page used under its former name.
+for (const [oldKey, newKey] of [['hamsat.qth', LS.qth], ['hamsat.view.v2', LS.view], ['hamsat.panels', LS.panels], ['hamsat.tle.v2', LS.tle]]) {
+  try {
+    if (localStorage.getItem(newKey) === null) {
+      const v = localStorage.getItem(oldKey);
+      if (v !== null) localStorage.setItem(newKey, v);
+    }
+  } catch (e) { /* storage unavailable */ }
+}
+
+const EMBEDDED_TLE_DATE = '2026-10-22T08:53:04Z';
 // The site's own tle.txt (refreshed by the pipeline) first, CelesTrak as a fallback.
 const TLE_SOURCES = [
   { url: 'tle.txt', label: 'site TLE file' },
   { url: 'https://celestrak.org/NORAD/elements/gp.php?GROUP=amateur&FORMAT=tle', label: 'CelesTrak' },
   { url: 'https://celestrak.com/NORAD/elements/gp.php?GROUP=amateur&FORMAT=tle', label: 'CelesTrak' },
 ];
-const TLE_CACHE_KEY = 'hamsat.tle.v2', TLE_CACHE_TTL = 3 * 3600e3;
+const TLE_CACHE_KEY = LS.tle, TLE_CACHE_TTL = 3 * 3600e3;
 const PASS_HORIZON_H = 24, PASS_STEP_MS = 20e3;
 
 // Curated transponder table. Keyed by NORAD id, or matched by name pattern.
@@ -1155,14 +1166,14 @@ const state = {
   pinHover: null,
   nicknames: new Map(),
 };
-try { Object.assign(state.view, JSON.parse(localStorage.getItem('hamsat.view.v2') || '{}')); } catch (e) { /* ignore */ }
+try { Object.assign(state.view, JSON.parse(localStorage.getItem(LS.view) || '{}')); } catch (e) { /* ignore */ }
 
 function setObserver(lat, lon, altM) {
   state.observer = {
     lat, lon, alt: altM || 0, grid: toMaidenhead(lat, lon),
     gd: { latitude: lat * D2R, longitude: lon * D2R, height: (altM || 0) / 1000 },
   };
-  localStorage.setItem('hamsat.qth', JSON.stringify({ lat, lon, alt: altM || 0 }));
+  localStorage.setItem(LS.qth, JSON.stringify({ lat, lon, alt: altM || 0 }));
   $('#qth-label').textContent = state.observer.grid.toUpperCase();
   $('#qth-pill').title = `Your station: ${state.observer.grid.toUpperCase()}, ${fmtLatLon(lat, lon)}, ${altM || 0} m. Click to change.`;
   for (const s of state.sats) { s.passes = null; s.passesAt = 0; }
@@ -1235,7 +1246,7 @@ function applyCatalog(entries, source, time, ok) {
   renderDetail(true);
 }
 function tleStamp(text, fallback) {
-  const m = text.match(/^# HamSat TLE set generated (\S+)/m);
+  const m = text.match(/^# (?:OrbitQTH|OrbitQTH) TLE set generated (\S+)/m);
   const t = m ? Date.parse(m[1]) : NaN;
   return Number.isFinite(t) ? t : fallback;
 }
@@ -1572,12 +1583,12 @@ async function downloadOfflineCopy() {
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'hamsat.html';
+    a.download = 'orbitqth.html';
     document.body.appendChild(a);
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 30e3);
-    showMsg('Saved hamsat.html with the latest orbital elements. It works fully offline; elements age, so grab a fresh copy before a trip.', 'info');
+    showMsg('Saved orbitqth.html with the latest orbital elements. It works fully offline; elements age, so grab a fresh copy before a trip.', 'info');
   } catch (err) {
     showMsg(`Could not prepare the offline copy: ${err.message}`);
   }
@@ -1634,7 +1645,7 @@ function applyLayout() {
 function setPanels(left, right) {
   showLeft = left;
   showRight = right;
-  localStorage.setItem('hamsat.panels', JSON.stringify({ left, right }));
+  localStorage.setItem(LS.panels, JSON.stringify({ left, right }));
   applyLayout();
   resizeMap();
   detailDirty = true;
@@ -2308,7 +2319,7 @@ function renderDetail(rebuild) {
       <div class="sect"><h3>Passes <span>next 24 h, local time, 0&deg; horizon</span></h3><div id="d-passes"></div></div>
       <div class="sect"><h3>Orbit</h3><div class="stats" id="d-orbit"></div></div>
       <div class="sect"><h3>More about this satellite</h3><div class="links" id="d-links"></div></div>
-      <div class="foot">Transponder data is a curated table in the page source (MODES). Verify against the AMSAT status page before operating. Doppler is computed for the listed downlink frequency.<br>HamSat by George Anestopoulos, SV1DOD / HB9ISH.</div>`;
+      <div class="foot">Transponder data is a curated table in the page source (MODES). Verify against the AMSAT status page before operating. Doppler is computed for the listed downlink frequency.<br>OrbitQTH by George Anestopoulos, SV1DOD / HB9ISH.</div>`;
     $('#d-name').textContent = s.name;
     $('#d-full').textContent = s.fullName !== s.name ? s.fullName : '';
     $('#d-norad').textContent = `NORAD ${s.norad}`;
@@ -2541,14 +2552,14 @@ function syncViewButtons() {
 $$('#viewctl button').forEach((b) => b.addEventListener('click', () => {
   const k = b.dataset.view;
   state.view[k] = b.dataset.val === 'toggle' ? !state.view[k] : b.dataset.val;
-  localStorage.setItem('hamsat.view.v2', JSON.stringify(state.view));
+  localStorage.setItem(LS.view, JSON.stringify(state.view));
   syncViewButtons();
 }));
 syncViewButtons();
 $('#tle-pill').addEventListener('click', () => loadTLEs(true));
 $('#myfp-el').addEventListener('change', (e) => {
   state.view.myfpEl = parseFloat(e.target.value);
-  localStorage.setItem('hamsat.view.v2', JSON.stringify(state.view));
+  localStorage.setItem(LS.view, JSON.stringify(state.view));
 });
 
 function satAt(clientX, clientY) {
@@ -2758,11 +2769,11 @@ function tick(nowPerf) {
 
 (function init() {
   try {
-    const q = JSON.parse(localStorage.getItem('hamsat.qth'));
+    const q = JSON.parse(localStorage.getItem(LS.qth));
     if (q && Number.isFinite(q.lat) && Number.isFinite(q.lon)) setObserver(q.lat, q.lon, q.alt || 0);
   } catch (e) { /* ignore */ }
   try {
-    const p = JSON.parse(localStorage.getItem('hamsat.panels') || '{}');
+    const p = JSON.parse(localStorage.getItem(LS.panels) || '{}');
     if (typeof p.left === 'boolean') showLeft = p.left;
     if (typeof p.right === 'boolean') showRight = p.right;
   } catch (e) { /* ignore */ }
