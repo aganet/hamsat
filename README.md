@@ -5,7 +5,7 @@ account, no install: download index.html, open it, work the birds.
 
 ![OrbitQTH](screenshot.png)
 
-**Live:** https://orbitqth.aganet.gr/
+**Live:** https://hamsat.aganet.gr/
 
 ## What it does
 
