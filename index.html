@@ -562,7 +562,8 @@ body.focus .under, body.focus #legend { display: none; }
       </div>
       <div class="grp">
         <button id="offline-btn" title="Save a self-contained hamsat.html with the latest orbital elements baked in. Open it from your phone or a USB stick with no internet: tracking and pass predictions keep working offline.">&#8681; offline copy</button>
-        <button id="tle-import-btn" title="Load a TLE file you downloaded yourself from CelesTrak (amateur group) or AMSAT (nasabare.txt). The elements are applied and remembered, so a saved offline copy can be refreshed without this page ever reaching the internet.">&#8682; load TLE file</button>
+        <button id="tle-fetch-btn" title="Pull fresh orbital elements over the internet and apply them: first this site's own tle.txt, then CelesTrak directly. A saved copy of the page has no tle.txt, so it goes straight to CelesTrak.">&#8635; fetch TLEs</button>
+        <button id="tle-import-btn" title="Load a TLE file you downloaded yourself from CelesTrak (amateur group) or AMSAT (nasabare.txt). The elements are applied and remembered, so a saved offline copy can be refreshed without this page ever reaching the internet.">&#8682; load TLE</button>
         <input type="file" id="tle-import" accept=".txt,.tle,text/plain" hidden>
       </div>
     </div>
@@ -921,7 +922,7 @@ LILIUM-4
 
 const D2R = Math.PI / 180, R2D = 180 / Math.PI;
 const R_EARTH = 6371.0088, R_EQ = 6378.137, MU = 398600.4418, C_KMS = 299792.458;
-const EMBEDDED_TLE_DATE = '2026-10-22T08:17:18Z';
+const EMBEDDED_TLE_DATE = '2026-10-22T08:30:16Z';
 // The site's own tle.txt (refreshed by the pipeline) first, CelesTrak as a fallback.
 const TLE_SOURCES = [
   { url: 'tle.txt', label: 'site TLE file' },
@@ -2088,6 +2089,17 @@ function drawMap(now) {
     }
   }
   ctx.textBaseline = 'alphabetic';
+
+  // Element freshness in the unused bottom-right corner: dim while current,
+  // amber once the set is old enough to start mattering for LEO pointing.
+  if (state.tle.time) {
+    const age = Date.now() - state.tle.time;
+    ctx.font = `10px ${getComputedStyle(document.body).getPropertyValue('--mono')}`;
+    ctx.textAlign = 'right';
+    ctx.fillStyle = age > 48 * 3600e3 ? 'rgba(255,207,92,0.85)' : 'rgba(160,195,240,0.5)';
+    ctx.fillText(`elements ${fmtAge(age)} old \u00b7 ${state.tle.source}`, W - 8, H - 8);
+    ctx.textAlign = 'start';
+  }
 }
 
 // ---------------------------------------------------------------- pass timeline
@@ -2625,6 +2637,16 @@ map.canvas.addEventListener('dblclick', (e) => {
 });
 $('#pin-qth').addEventListener('click', () => setPinMode(!state.pinMode));
 $('#offline-btn').addEventListener('click', downloadOfflineCopy);
+$('#tle-fetch-btn').addEventListener('click', async () => {
+  showMsg('Fetching fresh elements...', 'info');
+  const before = state.tle.time;
+  await loadTLEs(true);
+  if (state.tle.ok && state.tle.time >= before) {
+    showMsg(`Elements updated: ${state.sats.length} satellites from ${state.tle.source}, ${fmtAge(Date.now() - state.tle.time)} old.`, 'info');
+  } else {
+    showMsg(`No live source reachable; still using ${state.tle.source} (${fmtAge(Date.now() - state.tle.time)} old). You can download elements yourself and use "load TLE file".`);
+  }
+});
 $('#tle-import-btn').addEventListener('click', () => $('#tle-import').click());
 function importTleText(text, name, lastModified) {
   if (text.includes('<')) throw new Error('that is not a plain TLE file');
